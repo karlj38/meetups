@@ -9,7 +9,15 @@
         @click="sideNav = true"
         class="hidden-sm-and-up"
       />
-      <v-toolbar-title>DevMeetups</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link
+          style="cursor:pointer"
+          tag="span"
+          to="/"
+        >
+          DevMeetups
+        </router-link>
+      </v-toolbar-title>
 
       <v-spacer />
 
@@ -17,14 +25,20 @@
         <v-btn
           v-for="item in menuItems"
           :key="item.title"
+          :to="item.link"
           color="transparent"
           depressed
+          router
         >
           <v-icon left>mdi-{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+
+    <v-main>
+      <router-view></router-view>
+    </v-main>
 
     <v-navigation-drawer
       v-model="sideNav"
@@ -33,7 +47,10 @@
       <v-list>
         <v-list-item
           v-for="item in menuItems"
-          :key="item.title">
+          :key="item.title"
+          :to="item.link"
+          router
+        >
           <v-list-item-icon>
             <v-icon>mdi-{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -44,10 +61,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-main>
-      <router-view></router-view>
-    </v-main>
   </v-app>
 </template>
 
@@ -62,22 +75,27 @@ export default {
     menuItems: [
       {
         icon: "account-supervisor",
+        link: "/meetups",
         title: "Meetups"
       },
       {
         icon: "map-marker",
+        link: "/meetups/new",
         title: "Organize"
       },
       {
         icon: "card-account-details",
+        link: "/profile",
         title: "Profile"
       },
       {
         icon: "account-plus",
+        link: "/register",
         title: "Sign Up"
       },
       {
         icon: "lock-open",
+        link: "/login",
         title: "Sign In"
       }
     ],

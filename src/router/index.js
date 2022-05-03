@@ -1,22 +1,44 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import AppHome from '@/components/AppHome'
+import MeetupsIndex from '@/components/Meetup/MeetupsIndex'
+import CreateMeetup from '@/components/Meetup/CreateMeetup'
+import UserProfile from '@/components/User/UserProfile'
+import LogIn from '@/components/User/LogIn'
+import SignUp from '@/components/User/SignUp'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'Home',
+    component: AppHome
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    name: 'logIn',
+    component: LogIn
+  },
+  {
+    path: '/meetups',
+    name: 'Meetups',
+    component: MeetupsIndex
+  },
+  {
+    path: '/meetups/new',
+    name: 'CreateMeetup',
+    component: CreateMeetup
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: UserProfile
+  },
+  {
+    path: '/register',
+    name: 'SignUp',
+    component: SignUp
   }
 ]
 

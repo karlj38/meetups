@@ -11,11 +11,18 @@
       />
       <v-toolbar-title>
         <router-link
-          style="cursor:pointer"
-          tag="span"
+          v-slot="{ navigate }"
+          custom
           to="/"
         >
-          DevMeetups
+          <span
+            @click="navigate"
+            @keypress.enter="navigate"
+            role="link"
+            style="cursor:pointer"
+          >
+            DevMeetups
+          </span>
         </router-link>
       </v-toolbar-title>
 

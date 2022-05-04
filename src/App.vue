@@ -35,7 +35,6 @@
           :to="item.link"
           color="transparent"
           depressed
-          router
         >
           <v-icon left>mdi-{{ item.icon }}</v-icon>
           {{ item.title }}
@@ -56,7 +55,6 @@
           v-for="item in menuItems"
           :key="item.title"
           :to="item.link"
-          router
         >
           <v-list-item-icon>
             <v-icon>mdi-{{ item.icon }}</v-icon>

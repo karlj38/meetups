@@ -6,7 +6,6 @@
           class="info"
           large
           to="/meetups"
-          router
         >
           Expore Meetups
         </v-btn>
@@ -17,7 +16,6 @@
           class="info"
           large
           to="/meetups/new"
-          router
         >
           Create Meetup
         </v-btn>
@@ -26,10 +24,11 @@
 
     <v-row class="mt-0" wrap>
       <v-col>
-        <v-carousel>
+        <v-carousel style="cursor:pointer">
           <v-carousel-item
             v-for="meetup in meetups"
             :key="meetup.id"
+            @click="loadMeetup(meetup.id)"
             :src="meetup.img"
           >
             <v-sheet color="transparent" height="100%">
@@ -72,6 +71,11 @@ export default {
           title: "Paris"
         }
       ]
+    }
+  },
+  methods: {
+    loadMeetup(id) {
+      this.$router.push("/meetups/" + id);
     }
   }
 }

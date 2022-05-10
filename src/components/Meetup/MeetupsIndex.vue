@@ -1,14 +1,18 @@
 <template>
   <v-container>
-    <v-row wrap>
+    <v-row
+      v-for="meetup in meetups"
+     :key="meetup.id"
+      wrap
+    >
       <v-col class="col-sm-10 col-md-8 offset-sm-1 offset-md-2">
-        <v-card class="info">
+        <v-card class="info" >
           <v-container fluid>
             <v-row wrap>
               <v-col class="col-5 col-sm-4 col-md-3">
                 <v-img
+                  :src="meetup.img"
                   height="130px"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/1200px-New_york_times_square-terabass.jpg"
                 />
               </v-col>
 
@@ -17,16 +21,16 @@
                   class="white--text"
                   primary-title
                 >
-                  My Meetup
+                  {{ meetup.title }}
                 </v-card-title>
 
-                <v-card-subtitle>17th July 2022</v-card-subtitle>
+                <v-card-subtitle>{{ meetup.date }}</v-card-subtitle>
 
                 <v-card-actions>
                   <v-btn
                     color="transparent"
                     depressed
-                    to="/meetups/1"
+                    :to="`/meetups/${meetup.id}`"
                   >
                     <v-icon left>mdi-arrow-right</v-icon>
                     View Meetup
@@ -40,3 +44,13 @@
     </v-row>
   </v-container>
 </template>
+
+<script>
+  export default{
+    computed: {
+      meetups () {
+        return this.$store.getters.meetups;
+      }
+    }
+  }
+</script>

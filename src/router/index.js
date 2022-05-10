@@ -34,7 +34,8 @@ const routes = [
   {
     path: '/meetups/:id',
     name: 'MeetupView',
-    component: MeetupView
+    component: MeetupView,
+    props: true
   },
   {
     path: '/profile',

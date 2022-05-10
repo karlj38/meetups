@@ -57,20 +57,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      meetups: [
-        {
-          id: "123",
-          img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/1200px-New_york_times_square-terabass.jpg",
-          title: "NY"
-        },
-        {
-          id: "234",
-          img: "https://images.unsplash.com/photo-1564594736624-def7a10ab047?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max",
-          title: "Paris"
-        }
-      ]
+  computed: {
+    meetups () {
+      return this.$store.getters.featuredMeetups
     }
   },
   methods: {

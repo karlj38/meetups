@@ -30,11 +30,24 @@ export const store = new Vuex.Store({
       ]
     }
   },
-  mutuations: {
-
+  mutations: {
+    createMeetup(state, payload) {
+      state.meetups.push(payload);
+    }
   },
   actions: {
-    
+    createMeetup({ commit }, payload) {
+      const meetup = {
+        id: "test",
+        title: payload.title,
+        location: payload.location,
+        img: payload.img,
+        description: payload.description,
+        date: payload.date
+      };
+
+      commit("createMeetup", meetup);
+    }
   },
   getters: {
     featuredMeetups (state, getters) {

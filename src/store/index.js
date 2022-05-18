@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 Vue.use(Vuex);
 
@@ -46,6 +46,22 @@ export const store = new Vuex.Store({
       };
 
       commit("createMeetup", meetup);
+    },
+    logUserIn({ commit }, payload) {
+      const auth = getAuth();
+
+      signInWithEmailAndPassword(auth, payload.email, payload.password)
+      .then(data => {
+        const user = {
+          id: data.user.uid,
+          registeredMeetups: []
+        };
+
+        commit("setUser", user);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     },
     signUserUp({ commit }, payload) {
       const auth = getAuth();

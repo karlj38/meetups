@@ -59,11 +59,10 @@
 export default {
   name: "App",
 
-  components: {},
-
   data: () => ({
     sideNav: false,
   }),
+
   computed: {
     menuItems() {
       let output = [
@@ -101,9 +100,9 @@ export default {
 
       return output;
     },
-  },
-  userAuthenticated() {
-    return this.$store.getters.user;
+    userAuthenticated() {
+      return Boolean(this.$store.getters.user);
+    },
   },
 };
 </script>

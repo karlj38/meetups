@@ -4,7 +4,7 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import { store } from "./store"
 import DateFilter from "./filters/date";
-import * as firebase from "firebase/app";
+import { initializeApp } from 'firebase/app';
 
 Vue.config.productionTip = false
 
@@ -16,7 +16,7 @@ new Vue({
   store,
   render: h => h(App),
   created() {
-    firebase.initializeApp({
+    initializeApp({
       apiKey: "AIzaSyBYuSaCWCSPoWHZAlzPFXVL07uah2goCgU",
       authDomain: "meetups-ad1cc.firebaseapp.com",
       projectId: "meetups-ad1cc",

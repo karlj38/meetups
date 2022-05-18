@@ -1,25 +1,14 @@
 <template>
   <v-app dark>
-    <v-toolbar
-      class="primary"
-      dark
-      dense
-    >
-      <v-app-bar-nav-icon
-        @click="sideNav = true"
-        class="hidden-sm-and-up"
-      />
+    <v-toolbar class="primary" dark dense>
+      <v-app-bar-nav-icon @click="sideNav = true" class="hidden-sm-and-up" />
       <v-toolbar-title>
-        <router-link
-          v-slot="{ navigate }"
-          custom
-          to="/"
-        >
+        <router-link v-slot="{ navigate }" custom to="/">
           <span
             @click="navigate"
             @keypress.enter="navigate"
             role="link"
-            style="cursor:pointer"
+            style="cursor: pointer"
           >
             DevMeetups
           </span>
@@ -46,10 +35,7 @@
       <router-view></router-view>
     </v-main>
 
-    <v-navigation-drawer
-      v-model="sideNav"
-      temporary
-    >
+    <v-navigation-drawer v-model="sideNav" temporary>
       <v-list>
         <v-list-item
           v-for="item in menuItems"
@@ -71,40 +57,53 @@
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {
-  },
+  components: {},
 
   data: () => ({
-    menuItems: [
-      {
-        icon: "account-supervisor",
-        link: "/meetups",
-        title: "Meetups"
-      },
-      {
-        icon: "map-marker",
-        link: "/meetups/new",
-        title: "Organize"
-      },
-      {
-        icon: "card-account-details",
-        link: "/profile",
-        title: "Profile"
-      },
-      {
-        icon: "account-plus",
-        link: "/register",
-        title: "Sign Up"
-      },
-      {
-        icon: "lock-open",
-        link: "/login",
-        title: "Sign In"
-      }
-    ],
     sideNav: false,
   }),
+  computed: {
+    menuItems() {
+      let output = [
+        {
+          icon: "account-plus",
+          link: "/register",
+          title: "Sign Up",
+        },
+        {
+          icon: "lock-open",
+          link: "/login",
+          title: "Sign In",
+        },
+      ];
+
+      if (this.userAuthenticated) {
+        output = [
+          {
+            icon: "account-supervisor",
+            link: "/meetups",
+            title: "Meetups",
+          },
+          {
+            icon: "map-marker",
+            link: "/meetups/new",
+            title: "Organize",
+          },
+          {
+            icon: "card-account-details",
+            link: "/profile",
+            title: "Profile",
+          },
+        ];
+      }
+
+      return output;
+    },
+  },
+  userAuthenticated() {
+    return this.$store.getters.user;
+  },
 };
 </script>

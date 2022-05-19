@@ -5,10 +5,13 @@ import router from './router'
 import { store } from "./store"
 import DateFilter from "./filters/date";
 import { initializeApp } from 'firebase/app';
+import AppAlert from "./components/shared/Alert"
 
 Vue.config.productionTip = false
 
 Vue.filter("date", DateFilter);
+
+Vue.component("app-alert", AppAlert);
 
 new Vue({
   vuetify,

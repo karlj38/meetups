@@ -24,7 +24,9 @@ export const store = new Vuex.Store({
         title: "Paris"
       }
     ],
-    user: null
+    user: null,
+    loading: false,
+    error: null
   },
   mutations: {
     createMeetup(state, payload) {
@@ -32,9 +34,21 @@ export const store = new Vuex.Store({
     },
     setUser(state, payload) {
       state.user = payload;
+    },
+    setLoading(state, payload) {
+      state.loading = payload;
+    },
+    setError(state, payload) {
+      state.error = payload;
+    },
+    clearError(state) {
+      state.error = null;
     }
   },
   actions: {
+    clearError({ commit }) {
+      commit("clearError");
+    },
     createMeetup({ commit }, payload) {
       const meetup = {
         id: "test",
@@ -48,6 +62,8 @@ export const store = new Vuex.Store({
       commit("createMeetup", meetup);
     },
     logUserIn({ commit }, payload) {
+      commit("setLoading", true);
+      commit("clearError");
       const auth = getAuth();
 
       signInWithEmailAndPassword(auth, payload.email, payload.password)
@@ -60,10 +76,16 @@ export const store = new Vuex.Store({
         commit("setUser", user);
       })
       .catch(err => {
+        commit("setError", err);
         console.log(err);
+      })
+      .finally(() => {
+        commit("setLoading", false);
       });
     },
     signUserUp({ commit }, payload) {
+      commit("setLoading", true);
+      commit("clearError");
       const auth = getAuth();
 
       createUserWithEmailAndPassword(auth, payload.email, payload.password)
@@ -76,13 +98,23 @@ export const store = new Vuex.Store({
         commit("setUser", newUser);
       })
       .catch(err => {
+        commit("setError", err);
         console.log(err);
+      })
+      .finally(() => {
+        commit("setLoading", false);
       });
     }
   },
   getters: {
+    error(state) {
+      return state.error;
+    },
     featuredMeetups (state, getters) {
       return getters.meetups.slice(0, 5);
+    },
+    loading(state) {
+      return state.loading;
     },
     meetups (state) {
       return state.meetups.sort((a, b) => {

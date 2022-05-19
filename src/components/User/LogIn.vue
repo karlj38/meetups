@@ -1,7 +1,13 @@
 <template>
   <v-container>
+    <v-row v-if="error">
+      <v-col class="col-sm-6 offset-sm-3">
+        <app-alert @dismissed="onDismissed" :text="error.message" />
+      </v-col>
+    </v-row>
+
     <v-row>
-      <v-col>
+      <v-col class="col-sm-6 offset-sm-3">
         <v-card>
           <v-card-text>
             <v-container>
@@ -34,7 +40,9 @@
 
                 <v-row>
                   <v-col>
-                    <v-btn type="submit">Log In</v-btn>
+                    <v-btn :disabled="loading" :loading="loading" type="submit">
+                      Log In
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -55,11 +63,21 @@ export default {
     };
   },
   computed: {
+    error() {
+      return this.$store.getters.error;
+    },
+    loading() {
+      return this.$store.getters.loading;
+    },
     user() {
       return this.$store.getters.user;
     },
   },
   methods: {
+    onDismissed() {
+      console.log("dismiss");
+      this.$store.dispatch("clearError");
+    },
     onLogIn() {
       this.$store.dispatch("logUserIn", {
         email: this.email,

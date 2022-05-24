@@ -59,14 +59,15 @@ export const store = new Vuex.Store({
     clearError({ commit }) {
       commit("clearError");
     },
-    createMeetup({ commit }, payload) {
+    createMeetup({ commit, getters }, payload) {
       const db = getDatabase();
       const meetup = {
         title: payload.title,
         location: payload.location,
         img: payload.img,
         description: payload.description,
-        date: payload.date.toISOString()
+        date: payload.date.toISOString(),
+        creatorId:getters.user.id
       };
       const meetupListRef = ref(db, "meetups");
 
@@ -97,6 +98,7 @@ export const store = new Vuex.Store({
             img: obj[key].img,
             description: obj[key].description,
             date: obj[key].date,
+            creatorId: obj[key].creatorId
           })
         }
 

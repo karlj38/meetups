@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-toolbar class="primary" dark dense>
+    <v-app-bar app class="primary" dark dense>
       <v-app-bar-nav-icon @click="sideNav = true" class="hidden-sm-and-up" />
       <v-toolbar-title>
         <router-link v-slot="{ navigate }" custom to="/">
@@ -39,13 +39,13 @@
           Logout
         </v-btn>
       </v-toolbar-items>
-    </v-toolbar>
+    </v-app-bar>
 
     <v-main>
       <router-view></router-view>
     </v-main>
 
-    <v-navigation-drawer v-model="sideNav" temporary>
+    <v-navigation-drawer v-model="sideNav" app temporary>
       <v-list>
         <v-list-item
           v-for="item in menuItems"

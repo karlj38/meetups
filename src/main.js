@@ -5,6 +5,7 @@ import router from './router'
 import { store } from "./store"
 import DateFilter from "./filters/date";
 import { initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AppAlert from "./components/shared/Alert"
 
 Vue.config.productionTip = false
@@ -28,6 +29,14 @@ new Vue({
       messagingSenderId: "636331269258",
       appId: "1:636331269258:web:d5bd947a15393c2a6de173",
       measurementId: "G-055SB0SHEH"
+    });
+
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        this.$store.dispatch("autoLogIn", user);
+      }
     });
 
     this.$store.dispatch("loadMeetups");

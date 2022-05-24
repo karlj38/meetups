@@ -22,6 +22,7 @@ new Vue({
     initializeApp({
       apiKey: "AIzaSyBYuSaCWCSPoWHZAlzPFXVL07uah2goCgU",
       authDomain: "meetups-ad1cc.firebaseapp.com",
+      databaseURL: "https://meetups-ad1cc-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "meetups-ad1cc",
       storageBucket: "meetups-ad1cc.appspot.com",
       messagingSenderId: "636331269258",

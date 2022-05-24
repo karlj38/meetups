@@ -1,6 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword
+} from "firebase/auth";
+import {
+  getDatabase,
+  push,
+  ref,
+} from "firebase/database";
 
 Vue.use(Vuex);
 
@@ -49,17 +58,24 @@ export const store = new Vuex.Store({
     clearError({ commit }) {
       commit("clearError");
     },
-    createMeetup({ commit }, payload) {
+    async createMeetup({ commit }, payload) {
+      const db = getDatabase();
       const meetup = {
-        id: "test",
         title: payload.title,
         location: payload.location,
         img: payload.img,
         description: payload.description,
-        date: payload.date
+        date: payload.date.toISOString()
       };
-
-      commit("createMeetup", meetup);
+      const meetupListRef = ref(db, "meetups");
+      push(meetupListRef, meetup)
+      .then(data => {
+        const key = data.key;
+        commit("createMeetup", { id: key, ...meetup });
+      })
+      .catch(err => {
+        console.log(err);
+      });
     },
     logUserIn({ commit }, payload) {
       commit("setLoading", true);

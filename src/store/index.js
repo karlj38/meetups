@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword
 } from "firebase/auth";
 import {
+  get,
   getDatabase,
   push,
   ref,
@@ -16,22 +17,6 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     meetups: [
-      {
-        date: new Date(),
-        desc: "bla bla bla",
-        id: "123",
-        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/1200px-New_york_times_square-terabass.jpg",
-        location: "loc",
-        title: "NY"
-      },
-      {
-        date: new Date(),
-        desc: "bla bla bla",
-        id: "234",
-        img: "https://images.unsplash.com/photo-1564594736624-def7a10ab047?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max",
-        location: "loc",
-        title: "Paris"
-      }
     ],
     user: null,
     loading: false,
@@ -40,6 +25,9 @@ export const store = new Vuex.Store({
   mutations: {
     createMeetup(state, payload) {
       state.meetups.push(payload);
+    },
+    setMeetups(state, payload) {
+      state.meetups = payload;
     },
     setUser(state, payload) {
       state.user = payload;
@@ -58,7 +46,7 @@ export const store = new Vuex.Store({
     clearError({ commit }) {
       commit("clearError");
     },
-    async createMeetup({ commit }, payload) {
+    createMeetup({ commit }, payload) {
       const db = getDatabase();
       const meetup = {
         title: payload.title,
@@ -68,6 +56,7 @@ export const store = new Vuex.Store({
         date: payload.date.toISOString()
       };
       const meetupListRef = ref(db, "meetups");
+
       push(meetupListRef, meetup)
       .then(data => {
         const key = data.key;
@@ -75,6 +64,36 @@ export const store = new Vuex.Store({
       })
       .catch(err => {
         console.log(err);
+      });
+    },
+    loadMeetups({ commit }) {
+      commit("setLoading", true);
+      const db = getDatabase();
+      const meetupListRef = ref(db, "meetups");
+
+      get(meetupListRef)
+      .then(data => {
+        const meetups = [];
+        const obj = data.val();
+
+        for (const key in obj) {
+          meetups.push({
+            id: key,
+            title: obj[key].title,
+            location: obj[key].location,
+            img: obj[key].img,
+            description: obj[key].description,
+            date: obj[key].date,
+          })
+        }
+
+        commit("setMeetups", meetups);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        commit("setLoading", false);
       });
     },
     logUserIn({ commit }, payload) {

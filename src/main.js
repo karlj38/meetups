@@ -28,6 +28,8 @@ new Vue({
       messagingSenderId: "636331269258",
       appId: "1:636331269258:web:d5bd947a15393c2a6de173",
       measurementId: "G-055SB0SHEH"
-    })
+    });
+
+    this.$store.dispatch("loadMeetups");
   }
 }).$mount('#app')

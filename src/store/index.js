@@ -3,7 +3,8 @@ import Vuex from "vuex";
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from "firebase/auth";
 import {
   get,
@@ -45,6 +46,15 @@ export const store = new Vuex.Store({
   actions: {
     autoLogIn({ commit }, payload) {
       commit("setUser", {id: payload.uid, registeredMeetups: [] });
+    },
+    logout({ commit }) {
+      const auth = getAuth();
+
+      signOut(auth).then(() => {
+        commit("setUser", null);
+      }).catch((err) => {
+        console.log(err)
+      });
     },
     clearError({ commit }) {
       commit("clearError");

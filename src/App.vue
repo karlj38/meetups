@@ -28,6 +28,16 @@
           <v-icon left>mdi-{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+
+        <v-btn
+          v-if="userAuthenticated"
+          @click="onLogout"
+          color="transparent"
+          depressed
+        >
+          <v-icon left>mdi-exit-to-app</v-icon>
+          Logout
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -49,6 +59,14 @@
           <v-list-item-content>
             {{ item.title }}
           </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item v-if="userAuthenticated" @click="onLogout">
+          <v-list-item-icon>
+            <v-icon>mdi-exit-to-app</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content> Logout </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -74,7 +92,7 @@ export default {
         {
           icon: "lock-open",
           link: "/login",
-          title: "Sign In",
+          title: "Log In",
         },
       ];
 
@@ -102,6 +120,11 @@ export default {
     },
     userAuthenticated() {
       return Boolean(this.$store.getters.user);
+    },
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch("logout");
     },
   },
 };

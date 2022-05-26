@@ -7,11 +7,14 @@ import {
   signOut
 } from "firebase/auth";
 import {
+  child,
   get,
   getDatabase,
   push,
-  ref,
+  ref as dbRef,
+  update
 } from "firebase/database";
+import { getDownloadURL, getStorage, ref as storageRef, uploadBytes } from "firebase/storage";
 
 Vue.use(Vuex);
 
@@ -64,17 +67,34 @@ export const store = new Vuex.Store({
       const meetup = {
         title: payload.title,
         location: payload.location,
-        img: payload.img,
         description: payload.description,
         date: payload.date.toISOString(),
         creatorId:getters.user.id
       };
-      const meetupListRef = ref(db, "meetups");
+      const meetupListRef = dbRef(db, "meetups");
+      let imgUrl = "";
+      let key = "";
+      let fileRef = "";
 
       push(meetupListRef, meetup)
       .then(data => {
-        const key = data.key;
-        commit("createMeetup", { id: key, ...meetup });
+        key = data.key;
+        const filename = payload.img.name;
+        const ext = filename.slice(filename.lastIndexOf("."));
+        const storage = getStorage();
+        fileRef = storageRef(storage, `meetups/${key}${ext}`);
+        return uploadBytes(fileRef, payload.img);
+      })
+      .then(async () => {
+        imgUrl = await getDownloadURL(fileRef);
+        return update(child(meetupListRef, key), { imgUrl: imgUrl });
+      })
+      .then(key => {
+        commit("createMeetup", {
+          ...meetup,
+          id: key,
+          imgUrl: imgUrl
+        });
       })
       .catch(err => {
         console.log(err);
@@ -83,7 +103,7 @@ export const store = new Vuex.Store({
     loadMeetups({ commit }) {
       commit("setLoading", true);
       const db = getDatabase();
-      const meetupListRef = ref(db, "meetups");
+      const meetupListRef = dbRef(db, "meetups");
 
       get(meetupListRef)
       .then(data => {
@@ -95,7 +115,7 @@ export const store = new Vuex.Store({
             id: key,
             title: obj[key].title,
             location: obj[key].location,
-            img: obj[key].img,
+            imgUrl: obj[key].imgUrl,
             description: obj[key].description,
             date: obj[key].date,
             creatorId: obj[key].creatorId

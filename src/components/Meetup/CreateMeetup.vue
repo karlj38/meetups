@@ -33,16 +33,18 @@
 
       <v-row>
         <v-col class="offset-sm-3 col-sm-6">
-          <v-text-field
+          <v-file-input
             v-model="img"
-            name="img"
-            label="Image URL"
+            accept="image/*"
             id="img"
+            label="Image"
+            name="img"
             required
           />
         </v-col>
+
         <v-col class="offset-sm-3 col-sm-6">
-          <v-img :src="img" height="150px" />
+          <v-img :src="imgUrl" height="150px" />
         </v-col>
       </v-row>
 
@@ -95,7 +97,7 @@ export default {
     return {
       title: "",
       location: "",
-      img: "",
+      img: null,
       description: "",
       date: this.now.substr(0, 10),
       time: this.now.substr(11, 5),
@@ -104,6 +106,9 @@ export default {
   computed: {
     formValid() {
       return this.title && this.location && this.img && this.description;
+    },
+    imgUrl() {
+      return this.img ? URL.createObjectURL(this.img) : "";
     },
     submittableDateTime() {
       const date = new Date(this.date);

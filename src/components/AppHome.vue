@@ -26,7 +26,7 @@
             v-for="meetup in meetups"
             :key="meetup.id"
             @click="loadMeetup(meetup.id)"
-            :src="meetup.img"
+            :src="meetup.imgUrl"
           >
             <v-sheet color="transparent" height="100%">
               <v-row class="fill-height" align="end" justify="center">

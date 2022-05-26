@@ -6,7 +6,7 @@
           <v-container fluid>
             <v-row wrap>
               <v-col class="col-5 col-sm-4 col-md-3">
-                <v-img :src="meetup.img" height="130px" />
+                <v-img :src="meetup.imgUrl" height="130px" />
               </v-col>
 
               <v-col class="col-7 col-sm-8 col-md-9">

@@ -6,13 +6,15 @@ import { store } from "./store"
 import DateFilter from "./filters/date";
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import AppAlert from "./components/shared/Alert"
+import AppAlert from "./components/shared/Alert";
+import EditMeetupDetailsDialog from "./components/Meetup/Edit/EditMeetupDetailsDialog";
 
 Vue.config.productionTip = false
 
 Vue.filter("date", DateFilter);
 
 Vue.component("app-alert", AppAlert);
+Vue.component("app-edit-meetup-details-dialog", EditMeetupDetailsDialog);
 
 new Vue({
   vuetify,

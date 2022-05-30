@@ -30,6 +30,21 @@ export const store = new Vuex.Store({
     createMeetup(state, payload) {
       state.meetups.push(payload);
     },
+    updateMeetup(state, payload) {
+      let meetup = state.meetups.find(meetup => {
+        return meetup.id === payload.id;
+      });
+
+      if (payload.title) {
+        meetup.title = payload.title;
+      }
+      if (payload.description) {
+        meetup.description = payload.description;
+      }
+      if (payload.date) {
+        meetup.date = payload.date;
+      }
+    },
     setMeetups(state, payload) {
       state.meetups = payload;
     },
@@ -128,6 +143,30 @@ export const store = new Vuex.Store({
         console.log(err);
       })
       .finally(() => {
+        commit("setLoading", false);
+      });
+    },
+    updateMeetup({ commit }, payload) {
+      const db = getDatabase();
+      commit("setLoading", true);
+      const updateObj = {};
+
+      if (payload.title) {
+        updateObj.title = payload.title;
+      }
+      if (payload.description) {
+        updateObj.description = payload.description;
+      }
+      if (payload.date) {
+        updateObj.date = payload.date;
+      }
+
+      update(dbRef(db, "meetups/" + payload.id), updateObj)
+      .then(() => {
+        commit("updateMeetup", payload);
+      }).catch(err => {
+        console.log(err);
+      }).finally(() => {
         commit("setLoading", false);
       });
     },

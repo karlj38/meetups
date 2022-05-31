@@ -18,7 +18,7 @@
 
         <v-row>
           <v-col>
-            <v-card-text>
+            <v-card-text class="px-0">
               <v-text-field
                 v-model="editedTitle"
                 name="title"

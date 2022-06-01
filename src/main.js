@@ -44,6 +44,7 @@ new Vue({
     onAuthStateChanged(auth, user => {
       if (user) {
         this.$store.dispatch("autoLogIn", user);
+        this.$store.dispatch("fetchUserData");
       }
     });
 

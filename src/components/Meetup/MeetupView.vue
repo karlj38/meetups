@@ -39,7 +39,10 @@
 
           <v-card-actions>
             <v-spacer />
-            <registration-dialog :meetupId="meetup.id" />
+            <registration-dialog
+              v-if="userAuthenticated"
+              :meetupId="meetup.id"
+            />
           </v-card-actions>
         </v-card>
       </v-col>

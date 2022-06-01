@@ -80,6 +80,33 @@ export const store = new Vuex.Store({
     autoLogIn({ commit }, payload) {
       commit("setUser", { id: payload.uid, regKeys: {}, registeredMeetups: [] });
     },
+    fetchUserData({ commit, getters }) {
+      commit("setLoading", true);
+      const user = {...getters.user};
+
+      const db = getDatabase();
+      const userRef = dbRef(db, `users/${user.id}/`);
+      const userRegsRef = child(userRef, "registrations/");
+
+      get(userRegsRef, "value").then(ref => {
+        const data = ref.val();
+        let registeredMeetups = [];
+        let regKeys = {};
+
+        for (const key in data) {
+          registeredMeetups.push(data[key]);
+          regKeys[data[key]] = key;
+        }
+
+        user.registeredMeetups = registeredMeetups;
+        user.regKeys = regKeys;
+        commit("setUser", user);
+      }).catch(err => {
+        console.log(err);
+      }).finally(() => {
+        commit("setLoading", false);
+      })
+    },
     logout({ commit }) {
       const auth = getAuth();
 

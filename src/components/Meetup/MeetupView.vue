@@ -38,8 +38,8 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary">Register</v-btn>
+            <v-spacer />
+            <registration-dialog :meetupId="meetup.id" />
           </v-card-actions>
         </v-card>
       </v-col>

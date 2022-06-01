@@ -12,6 +12,7 @@ import {
   getDatabase,
   push,
   ref as dbRef,
+  remove,
   update
 } from "firebase/database";
 import { getDownloadURL, getStorage, ref as storageRef, uploadBytes } from "firebase/storage";
@@ -59,11 +60,25 @@ export const store = new Vuex.Store({
     },
     clearError(state) {
       state.error = null;
+    },
+    registerUserForMeetup(state, payload) {
+      const meetupId = payload.id;
+      if (state.user.registeredMeetups.findIndex(meetup => meetup.id === meetupId) >= 0) {
+        return
+      }
+      state.user.registeredMeetups.push(meetupId);
+      state.user.regKeys[meetupId] = payload.regKey;
+    },
+    unregisterUserForMeetup(state, payload) {
+      const meetups = state.user.registeredMeetups;
+      const index = meetups.findIndex(meetup => meetup.id === payload);
+      meetups.splice(index, 1);
+      delete state.user.regKeys[payload];
     }
   },
   actions: {
     autoLogIn({ commit }, payload) {
-      commit("setUser", {id: payload.uid, registeredMeetups: [] });
+      commit("setUser", { id: payload.uid, regKeys: {}, registeredMeetups: [] });
     },
     logout({ commit }) {
       const auth = getAuth();
@@ -179,6 +194,7 @@ export const store = new Vuex.Store({
       .then(data => {
         const user = {
           id: data.user.uid,
+          regKeys: {},
           registeredMeetups: []
         };
 
@@ -201,6 +217,7 @@ export const store = new Vuex.Store({
       .then(data => {
         const newUser = {
           id: data.user.uid,
+          regKeys: {},
           registeredMeetups: []
         };
 
@@ -213,7 +230,46 @@ export const store = new Vuex.Store({
       .finally(() => {
         commit("setLoading", false);
       });
-    }
+    },
+    registerUserForMeetup({ commit, getters }, payload) {
+      commit("setLoading", true);
+      const user = getters.user;
+
+      const db = getDatabase();
+      const userRef = dbRef(db, `users/${user.id}/`);
+      const userRegRef = child(userRef, "registrations/");
+      push(userRegRef, payload)
+      .then((data) => {
+        commit("registerUserForMeetup", { id: payload, regKey: data.key });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        commit("setLoading", false);
+      });
+    },
+    unregisterUserForMeetup({ commit, getters }, payload) {
+      commit("setLoading", true);
+      const user = getters.user;
+      if (!user.regKeys) return;
+
+      const regKey = user.regKeys[payload];
+      const db = getDatabase();
+      const userRef = dbRef(db, `users/${user.id}/`);
+      const userRegsRef = child(userRef, "registrations/");
+      const userRegRef = child(userRegsRef, regKey);
+      remove(userRegRef)
+      .then(() => {
+        commit("unregisterUserForMeetup")
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        commit("setLoading", false);
+      });
+    },
   },
   getters: {
     error(state) {

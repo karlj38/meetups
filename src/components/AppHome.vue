@@ -25,8 +25,8 @@
           <v-carousel-item
             v-for="meetup in meetups"
             :key="meetup.id"
-            @click="loadMeetup(meetup.id)"
             :src="meetup.imgUrl"
+            :to="`/meetups/${meetup.id}`"
           >
             <v-sheet color="transparent" height="100%">
               <v-row class="fill-height" align="end" justify="center">
@@ -56,11 +56,6 @@ export default {
     },
     meetups() {
       return this.$store.getters.featuredMeetups;
-    },
-  },
-  methods: {
-    loadMeetup(id) {
-      this.$router.push("/meetups/" + id);
     },
   },
 };

@@ -134,6 +134,8 @@ export default {
         return meetup.id === payload.id;
       });
 
+      if (!meetup) return;
+
       if (payload.title) {
         meetup.title = payload.title;
       }

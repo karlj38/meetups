@@ -152,15 +152,17 @@ export default {
     },
     registerUserForMeetup(state, payload) {
       const meetupId = payload.id;
-      if (state.user.registeredMeetups.findIndex(meetup => meetup.id === meetupId) >= 0) {
-        return
-      }
+      if (state.user.registeredMeetups.findIndex(meetup => meetup.id === meetupId) >= 0) return;
+
       state.user.registeredMeetups.push(meetupId);
       state.user.regKeys[meetupId] = payload.regKey;
     },
     unregisterUserForMeetup(state, payload) {
       const meetups = state.user.registeredMeetups;
       const index = meetups.findIndex(meetup => meetup.id === payload);
+
+      if (index < 0 ) return;
+
       meetups.splice(index, 1);
       delete state.user.regKeys[payload];
     }
